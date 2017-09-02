@@ -54,23 +54,24 @@ public class ProgressFrameLayout extends FrameLayout {
     TextView errorStateContentTextView;
     Button errorStateButton;
 
-    int loadingStateProgressBarWidth;
-    int loadingStateProgressBarHeight;
+    float loadingStateProgressBarWidth;
+    float loadingStateProgressBarHeight;
     int loadingStateProgressBarColor;
     int loadingStateBackgroundColor;
 
-    int emptyStateImageWidth;
-    int emptyStateImageHeight;
-    int emptyStateTitleTextSize;
-    int emptyStateContentTextSize;
+    float emptyStateImageWidth;
+    float emptyStateImageHeight;
+    float emptyStateTitleTextSize;
+    float emptyStateContentTextSize;
     int emptyStateTitleTextColor;
     int emptyStateContentTextColor;
     int emptyStateBackgroundColor;
+    float emptyStateTitleMarginTop;
 
-    int errorStateImageWidth;
-    int errorStateImageHeight;
-    int errorStateTitleTextSize;
-    int errorStateContentTextSize;
+    float errorStateImageWidth;
+    float errorStateImageHeight;
+    float errorStateTitleTextSize;
+    float errorStateContentTextSize;
     int errorStateTitleTextColor;
     int errorStateContentTextColor;
     int errorStateButtonTextColor;
@@ -100,10 +101,10 @@ public class ProgressFrameLayout extends FrameLayout {
 
         //Loading state attrs
         loadingStateProgressBarWidth =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_loadingProgressBarWidth, 108);
+                typedArray.getDimension(R.styleable.ProgressActivity_loadingProgressBarWidth, 108);
 
         loadingStateProgressBarHeight =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_loadingProgressBarHeight, 108);
+                typedArray.getDimension(R.styleable.ProgressActivity_loadingProgressBarHeight, 108);
 
         loadingStateProgressBarColor =
                 typedArray.getColor(R.styleable.ProgressActivity_loadingProgressBarColor, Color.RED);
@@ -113,16 +114,16 @@ public class ProgressFrameLayout extends FrameLayout {
 
         //Empty state attrs
         emptyStateImageWidth =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_emptyImageWidth, 308);
+                typedArray.getDimension(R.styleable.ProgressActivity_emptyImageWidth, 308);
 
         emptyStateImageHeight =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_emptyImageHeight, 308);
+                typedArray.getDimension(R.styleable.ProgressActivity_emptyImageHeight, 308);
 
         emptyStateTitleTextSize =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_emptyTitleTextSize, 15);
+                typedArray.getDimension(R.styleable.ProgressActivity_emptyTitleTextSize, 15);
 
         emptyStateContentTextSize =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_emptyContentTextSize, 14);
+                typedArray.getDimension(R.styleable.ProgressActivity_emptyContentTextSize, 14);
 
         emptyStateTitleTextColor =
                 typedArray.getColor(R.styleable.ProgressActivity_emptyTitleTextColor, Color.BLACK);
@@ -133,18 +134,21 @@ public class ProgressFrameLayout extends FrameLayout {
         emptyStateBackgroundColor =
                 typedArray.getColor(R.styleable.ProgressActivity_emptyBackgroundColor, Color.TRANSPARENT);
 
+        emptyStateTitleMarginTop =
+                typedArray.getDimension(R.styleable.ProgressActivity_emptyTitleMarginTop, 20);
+
         //Error state attrs
         errorStateImageWidth =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_errorImageWidth, 308);
+                typedArray.getDimension(R.styleable.ProgressActivity_errorImageWidth, 308);
 
         errorStateImageHeight =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_errorImageHeight, 308);
+                typedArray.getDimension(R.styleable.ProgressActivity_errorImageHeight, 308);
 
         errorStateTitleTextSize =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_errorTitleTextSize, 15);
+                typedArray.getDimension(R.styleable.ProgressActivity_errorTitleTextSize, 15);
 
         errorStateContentTextSize =
-                typedArray.getDimensionPixelSize(R.styleable.ProgressActivity_errorContentTextSize, 14);
+                typedArray.getDimension(R.styleable.ProgressActivity_errorContentTextSize, 14);
 
         errorStateTitleTextColor =
                 typedArray.getColor(R.styleable.ProgressActivity_errorTitleTextColor, Color.BLACK);
@@ -425,8 +429,8 @@ public class ProgressFrameLayout extends FrameLayout {
 
             // Setup ProgressBar
             loadingStateProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar_loading);
-            loadingStateProgressBar.getLayoutParams().width = loadingStateProgressBarWidth;
-            loadingStateProgressBar.getLayoutParams().height = loadingStateProgressBarHeight;
+            loadingStateProgressBar.getLayoutParams().width = (int) loadingStateProgressBarWidth;
+            loadingStateProgressBar.getLayoutParams().height = (int) loadingStateProgressBarHeight;
             loadingStateProgressBar.getIndeterminateDrawable()
                     .setColorFilter(loadingStateProgressBarColor, PorterDuff.Mode.SRC_IN);
             loadingStateProgressBar.requestLayout();
@@ -457,8 +461,8 @@ public class ProgressFrameLayout extends FrameLayout {
             emptyStateContentTextView = (TextView) view.findViewById(R.id.text_content);
 
             //Set empty state image width and height
-            emptyStateImageView.getLayoutParams().width = emptyStateImageWidth;
-            emptyStateImageView.getLayoutParams().height = emptyStateImageHeight;
+            emptyStateImageView.getLayoutParams().width = (int) emptyStateImageWidth;
+            emptyStateImageView.getLayoutParams().height = (int) emptyStateImageHeight;
             emptyStateImageView.requestLayout();
 
             emptyStateTitleTextView.setTextSize(emptyStateTitleTextSize);
@@ -466,16 +470,20 @@ public class ProgressFrameLayout extends FrameLayout {
             emptyStateTitleTextView.setTextColor(emptyStateTitleTextColor);
             emptyStateContentTextView.setTextColor(emptyStateContentTextColor);
 
+            MarginLayoutParams layoutParams = (MarginLayoutParams) emptyStateTitleTextView.getLayoutParams();
+            layoutParams.topMargin = (int) emptyStateTitleMarginTop;
+            emptyStateTitleTextView.setLayoutParams(layoutParams);
+
             //Set background color if not TRANSPARENT
             if (emptyStateBackgroundColor != Color.TRANSPARENT) {
                 this.setBackgroundColor(emptyStateBackgroundColor);
             }
 
-            layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            this.layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
-            layoutParams.gravity = CENTER_IN_PARENT;
+            this.layoutParams.gravity = CENTER_IN_PARENT;
 
-            addView(emptyStateFrameLayout, layoutParams);
+            addView(emptyStateFrameLayout, this.layoutParams);
         } else {
             emptyStateFrameLayout.setVisibility(VISIBLE);
         }
@@ -493,8 +501,8 @@ public class ProgressFrameLayout extends FrameLayout {
             errorStateButton = (Button) view.findViewById(R.id.button_retry);
 
             //Set error state image width and height
-            errorStateImageView.getLayoutParams().width = errorStateImageWidth;
-            errorStateImageView.getLayoutParams().height = errorStateImageHeight;
+            errorStateImageView.getLayoutParams().width = (int) errorStateImageWidth;
+            errorStateImageView.getLayoutParams().height = (int) errorStateImageHeight;
             errorStateImageView.requestLayout();
 
             errorStateTitleTextView.setTextSize(errorStateTitleTextSize);
