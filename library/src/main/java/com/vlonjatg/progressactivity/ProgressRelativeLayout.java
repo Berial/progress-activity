@@ -64,6 +64,7 @@ public class ProgressRelativeLayout extends RelativeLayout {
     int emptyStateTitleTextColor;
     int emptyStateContentTextColor;
     int emptyStateBackgroundColor;
+    float emptyStateTitleMarginTop;
 
     int errorStateImageWidth;
     int errorStateImageHeight;
@@ -130,6 +131,9 @@ public class ProgressRelativeLayout extends RelativeLayout {
 
         emptyStateBackgroundColor =
                 typedArray.getColor(R.styleable.ProgressActivity_emptyBackgroundColor, Color.TRANSPARENT);
+
+        emptyStateTitleMarginTop =
+                typedArray.getDimension(R.styleable.ProgressActivity_emptyTitleMarginTop, 20);
 
         //Error state attrs
         errorStateImageWidth =
@@ -463,6 +467,10 @@ public class ProgressRelativeLayout extends RelativeLayout {
             emptyStateContentTextView.setTextSize(emptyStateContentTextSize);
             emptyStateTitleTextView.setTextColor(emptyStateTitleTextColor);
             emptyStateContentTextView.setTextColor(emptyStateContentTextColor);
+
+            MarginLayoutParams lp = (MarginLayoutParams) emptyStateTitleTextView.getLayoutParams();
+            lp.topMargin = (int) emptyStateTitleMarginTop;
+            emptyStateTitleTextView.setLayoutParams(lp);
 
             //Set background color if not TRANSPARENT
             if (emptyStateBackgroundColor != Color.TRANSPARENT) {
